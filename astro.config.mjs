@@ -12,18 +12,16 @@ const { PUBLIC_SANITY_STUDIO_PROJECT_ID, PUBLIC_SANITY_STUDIO_DATASET, PUBLIC_SI
   ''
 )
 
-const hasValidProjectId = /^[a-z0-9-]+$/.test(PUBLIC_SANITY_STUDIO_PROJECT_ID ?? '')
+const projectId = PUBLIC_SANITY_STUDIO_PROJECT_ID || '00000000'
 
-const sanityIntegration = hasValidProjectId
-  ? [
-      sanity({
-        projectId: PUBLIC_SANITY_STUDIO_PROJECT_ID,
-        dataset: PUBLIC_SANITY_STUDIO_DATASET || 'production',
-        useCdn: false,
-        apiVersion: '2026-06-01',
-      }),
-    ]
-  : []
+const sanityIntegration = [
+  sanity({
+    projectId,
+    dataset: PUBLIC_SANITY_STUDIO_DATASET || 'production',
+    useCdn: false,
+    apiVersion: '2026-06-01',
+  }),
+]
 
 export default defineConfig({
   site: PUBLIC_SITE_URL || '',

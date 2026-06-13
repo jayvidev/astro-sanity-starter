@@ -6,7 +6,7 @@
 declare global {
   interface Window {
     vtActive?: boolean
-    lenis?: import('lenis').default
+    appLenis?: import('lenis').default
     lenisTicker?: (_time: number) => void
   }
 }

@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://jvdesignservices.com/sitemap.xml
+Sitemap: https://astro-sanity-starter-site.vercel.app/sitemap.xml

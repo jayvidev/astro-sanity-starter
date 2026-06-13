@@ -57,6 +57,7 @@
   html {
     --header-height: 84px;
     scroll-padding-top: var(--header-height);
+    @apply font-onest scroll-smooth;
   }
 
   @media (min-width: 1024px) {
@@ -68,7 +69,7 @@
 
   body {
     overscroll-behavior: none;
-    @apply text-text bg-white font-onest antialiased;
+    @apply text-text bg-white;
   }
 
   @media (prefers-reduced-motion: reduce) {

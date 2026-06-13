@@ -1,8 +1,4 @@
 ---
-/**
- * Starter welcome page. Standalone — does NOT query Sanity, so the project boots
- * with an empty .env. Replace it with your real home once Sanity is connected.
- */
 import Button from '@/components/ui/Button.astro'
 
 import '@/globals.css'
@@ -20,10 +16,7 @@ const REPO = 'https://github.com/jayvidev/astro-sanity-starter'
     <title>Astro + Sanity Starter</title>
     <meta name="description" content="Starter template with Astro and Sanity." />
   </head>
-  <body
-    class="min-h-screen w-full font-onest text-white"
-    style="background: radial-gradient(ellipse 80% 80% at 20% 0%, rgba(236, 72, 153, 0.15), transparent), radial-gradient(ellipse 60% 60% at 80% -10%, rgba(255, 85, 0, 0.18), transparent), rgb(9 9 11);"
-  >
+  <body class="min-h-screen w-full bg-background font-onest text-white">
     <main
       class="relative flex min-h-screen flex-col items-center justify-center gap-12 overflow-x-hidden px-6 py-20 sm:px-20"
     >
@@ -78,7 +71,7 @@ const REPO = 'https://github.com/jayvidev/astro-sanity-starter'
 
       <div class="mx-auto max-w-xl space-y-4 text-center">
         <h2 class="text-2xl font-bold">Welcome to your Astro + Sanity starter!</h2>
-        <p class="text-sm text-white/70 sm:text-base">
+        <p class="text-sm text-muted-foreground sm:text-base">
           This is a clean starter template. Start building your project by editing
           <code class="rounded bg-white/10 px-1 py-0.5 font-semibold">src/pages/index.astro</code>.
         </p>

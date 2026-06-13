@@ -1,0 +1,4 @@
+# Standalone workspace root so the Studio installs independently of the
+# Astro frontend (own node_modules + lockfile). Keeps the static site lean.
+allowBuilds:
+  esbuild: true

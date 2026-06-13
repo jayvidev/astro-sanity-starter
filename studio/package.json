@@ -1,0 +1,42 @@
+{
+  "name": "astro-sanity-starter-studio",
+  "private": true,
+  "version": "1.0.0",
+  "main": "package.json",
+  "type": "module",
+  "packageManager": "pnpm@11.2.2",
+  "scripts": {
+    "dev": "sanity dev",
+    "start": "sanity start",
+    "build": "sanity build",
+    "deploy": "sanity deploy"
+  },
+  "keywords": [
+    "sanity"
+  ],
+  "dependencies": {
+    "@sanity/icons": "^3.7.4",
+    "@sanity/orderable-document-list": "^2.0.0",
+    "@sanity/vision": "^5.20.0",
+    "lexorank": "^1.0.5",
+    "react": "^19.2.5",
+    "react-dom": "^19.2.5",
+    "sanity": "^5.20.0",
+    "sanity-plugin-media": "^4.3.1",
+    "styled-components": "^6.4.0"
+  },
+  "devDependencies": {
+    "@sanity/eslint-config-studio": "^6.0.0",
+    "@types/node": "^20.19.0",
+    "@types/react": "^19.2.14",
+    "eslint": "^9.39.4",
+    "prettier": "^3.8.2",
+    "typescript": "^5.9.3"
+  },
+  "prettier": {
+    "semi": false,
+    "printWidth": 100,
+    "bracketSpacing": false,
+    "singleQuote": true
+  }
+}

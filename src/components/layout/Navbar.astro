@@ -1,0 +1,385 @@
+---
+import { ChevronDown, Menu, X } from '@lucide/astro'
+
+import { getProjectCategories, getSettingsView } from '@/lib/content'
+
+const CATEGORIES = await getProjectCategories()
+const settings = await getSettingsView()
+const { mainNavigation } = settings
+
+const navLinks = mainNavigation.map((link) => ({
+  ...link,
+  hasChevron: link.href === '/projects',
+}))
+
+const projectFilters = CATEGORIES.map((cat) => ({
+  label: cat === 'All' ? 'All Projects' : cat,
+  href: cat === 'All' ? '/projects' : `/projects?category=${encodeURIComponent(cat)}`,
+  category: cat,
+}))
+
+const pathname = Astro.url.pathname
+
+function isActiveLink(href: string) {
+  return (
+    pathname === href ||
+    (pathname === '/' && href === '/#home') ||
+    (href !== '/' && pathname.startsWith(href + '/') && !href.includes('#'))
+  )
+}
+---
+
+<header
+  id="site-header"
+  class="fixed inset-x-0 top-4 lg:top-6 z-50 w-full px-4 lg:px-6"
+  transition:animate="none"
+  style="view-transition-name: header;"
+>
+  <div class="max-w-content mx-auto w-full relative">
+    {/* Main nav bar */}
+    <nav
+      class="flex h-13 lg:h-auto lg:py-2.5 items-center justify-between bg-white ps-4 pe-2 lg:pe-6 lg:ps-12 rounded-lg lg:rounded-[10px] relative z-20"
+    >
+      {/* Mobile Hamburger */}
+      <button
+        id="hamburger-btn"
+        class="lg:hidden p-2 text-neutral-dark hover:bg-gray-100 rounded-md transition-colors cursor-pointer"
+        aria-label="Toggle menu"
+        aria-expanded="false"
+        aria-controls="mobile-menu"
+      >
+        <span data-icon="menu"><Menu class="size-5" /></span>
+        <span data-icon="close" class="hidden"><X class="size-5" /></span>
+      </button>
+
+      {/* Desktop Nav Links */}
+      <ul class="hidden items-center gap-4 font-medium text-neutral-dark lg:flex">
+        {
+          navLinks.map((link) =>
+            link.hasChevron ? (
+              <li class="relative flex items-center gap-1" data-projects-trigger>
+                <a
+                  href={link.href}
+                  class={`transition-colors hover:text-primary ${isActiveLink(link.href) ? 'text-primary' : ''}`}
+                >
+                  {link.label}
+                </a>
+                <ChevronDown class="size-3.5 transition-transform duration-300" data-chevron />
+
+                {/* Dropdown de filtros */}
+                <div
+                  data-desktop-dropdown
+                  class="absolute left-1/2 top-full -translate-x-1/2 pt-3 opacity-0 pointer-events-none"
+                >
+                  <ul class="min-w-50 bg-white rounded-[10px] p-2 shadow-md border border-gray-100 flex flex-col">
+                    {projectFilters.map((f) => (
+                      <li>
+                        <a
+                          href={f.href}
+                          data-nav-filter={f.category}
+                          class="block rounded-md px-3 py-2 text-sm text-charcoal hover:bg-bg-light hover:text-primary transition-colors"
+                        >
+                          {f.label}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </li>
+            ) : (
+              <li class="flex items-center gap-1">
+                <a
+                  href={link.href}
+                  class={`transition-colors hover:text-primary ${isActiveLink(link.href) ? 'text-primary' : ''}`}
+                >
+                  {link.label}
+                </a>
+              </li>
+            )
+          )
+        }
+      </ul>
+
+      {/* Center Logo */}
+      <a
+        href="/"
+        class="flex items-center justify-center absolute left-1/2 -translate-x-1/2 lg:static lg:translate-x-0 lg:mx-auto xl:absolute xl:left-1/2 xl:-translate-x-1/2"
+      >
+        <span class="sr-only">{settings.companyName}</span>
+        {
+          settings.headerLogo ? (
+            <img
+              class="h-7 lg:h-9 w-auto object-contain"
+              src={settings.headerLogo}
+              alt={settings.companyName}
+              fetchpriority="high"
+              loading="eager"
+            />
+          ) : (
+            <span class="text-xl font-bold text-neutral-dark">{settings.companyName}</span>
+          )
+        }
+      </a>
+
+      {/* CTA Button */}
+      <a
+        href="/contact"
+        class="inline-flex text-[14px] lg:text-base py-2 lg:py-3 items-center justify-center rounded-full bg-neutral-dark px-4 lg:px-6 font-medium text-white transition-colors hover:bg-neutral-800"
+      >
+        <span class="hidden lg:inline">Get a Quote</span>
+        <span class="lg:hidden">Quote</span>
+      </a>
+    </nav>
+
+    {/* Mobile Menu */}
+    <div
+      id="mobile-menu"
+      class="absolute top-full left-0 right-0 mt-2 bg-white rounded-lg p-4 shadow-xs lg:hidden z-10 border border-gray-100 opacity-0 pointer-events-none"
+      aria-label="Mobile Menu"
+    >
+      <ul class="flex flex-col gap-4 font-medium text-neutral-dark">
+        {
+          navLinks.map((link) => (
+            <li data-mobile-item class="border-b border-gray-100 pb-2 last:border-0 last:pb-0">
+              {link.hasChevron ? (
+                <>
+                  <div class="flex items-center justify-between">
+                    <a
+                      href={link.href}
+                      class={`py-1 hover:text-primary transition-colors ${isActiveLink(link.href) ? 'text-primary' : ''}`}
+                    >
+                      {link.label}
+                    </a>
+                    <button
+                      type="button"
+                      aria-label="Toggle project filters"
+                      aria-expanded="false"
+                      data-mobile-projects-toggle
+                      class="p-1 text-neutral-dark cursor-pointer"
+                    >
+                      <ChevronDown
+                        class="size-4 transition-transform duration-300"
+                        data-mobile-chevron
+                      />
+                    </button>
+                  </div>
+
+                  {/* Submenú de filtros (móvil) */}
+                  <ul
+                    data-mobile-submenu
+                    class="overflow-hidden flex flex-col ps-3 mt-1 opacity-0"
+                    style="height: 0"
+                  >
+                    {projectFilters.map((f) => (
+                      <li>
+                        <a
+                          href={f.href}
+                          data-mobile-filter={f.category}
+                          class="block py-1.5 text-sm text-charcoal hover:text-primary transition-colors"
+                        >
+                          {f.label}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </>
+              ) : (
+                <a
+                  href={link.href}
+                  class={`flex items-center justify-between w-full text-left py-1 hover:text-primary transition-colors ${isActiveLink(link.href) ? 'text-primary' : ''}`}
+                >
+                  {link.label}
+                </a>
+              )}
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </div>
+</header>
+
+<script>
+  import { gsap } from 'gsap'
+
+  let clickHandler: ((e: MouseEvent) => void) | null = null
+  let scrollHandler: (() => void) | null = null
+
+  function initNavbar() {
+    const header = document.getElementById('site-header')
+    if (!header || header.hasAttribute('data-initialized')) return
+    header.setAttribute('data-initialized', 'true')
+
+    const hamburger = header.querySelector<HTMLButtonElement>('#hamburger-btn')
+    const menuIcon = header.querySelector<HTMLElement>('[data-icon="menu"]')
+    const closeIcon = header.querySelector<HTMLElement>('[data-icon="close"]')
+    const mobileMenu = header.querySelector<HTMLElement>('#mobile-menu')
+    const mobileItems = Array.from(header.querySelectorAll<HTMLElement>('[data-mobile-item]'))
+
+    let isMobileMenuOpen = false
+    let isMobileProjectsOpen = false
+
+    const setMenuVisual = (open: boolean) => {
+      menuIcon?.classList.toggle('hidden', open)
+      closeIcon?.classList.toggle('hidden', !open)
+      hamburger?.setAttribute('aria-expanded', String(open))
+      mobileMenu?.classList.toggle('pointer-events-auto', open)
+      mobileMenu?.classList.toggle('pointer-events-none', !open)
+    }
+
+    const openMobileMenu = () => {
+      if (!mobileMenu) return
+      isMobileMenuOpen = true
+      setMenuVisual(true)
+      gsap.fromTo(
+        mobileMenu,
+        { opacity: 0, y: -16, scaleY: 0.9, transformOrigin: 'top center' },
+        { opacity: 1, y: 0, scaleY: 1, duration: 0.38, ease: 'power3.out' }
+      )
+      gsap.fromTo(
+        mobileItems,
+        { x: -18, opacity: 0 },
+        { x: 0, opacity: 1, duration: 0.3, stagger: 0.06, ease: 'power2.out', delay: 0.12 }
+      )
+    }
+
+    const closeMobileMenu = () => {
+      if (!mobileMenu) return
+      isMobileMenuOpen = false
+      setMenuVisual(false)
+      gsap.to(mobileMenu, {
+        opacity: 0,
+        y: -10,
+        scaleY: 0.92,
+        transformOrigin: 'top center',
+        duration: 0.22,
+        ease: 'power2.in',
+      })
+      closeMobileProjects()
+    }
+
+    hamburger?.addEventListener('click', (e) => {
+      e.stopPropagation()
+      gsap.fromTo(
+        hamburger,
+        { rotate: isMobileMenuOpen ? 90 : -90, scale: 0.7 },
+        { rotate: 0, scale: 1, duration: 0.35, ease: 'back.out(2)' }
+      )
+      isMobileMenuOpen ? closeMobileMenu() : openMobileMenu()
+    })
+
+    if (clickHandler) {
+      document.removeEventListener('click', clickHandler)
+    }
+    clickHandler = (e: MouseEvent) => {
+      if (!isMobileMenuOpen) return
+      if (header && !header.contains(e.target as Node)) closeMobileMenu()
+    }
+    document.addEventListener('click', clickHandler)
+
+    if (scrollHandler) {
+      window.removeEventListener('scroll', scrollHandler)
+    }
+    scrollHandler = () => {
+      if (isMobileMenuOpen) closeMobileMenu()
+    }
+    window.addEventListener('scroll', scrollHandler, { passive: true })
+
+    const mobileToggle = header.querySelector<HTMLButtonElement>('[data-mobile-projects-toggle]')
+    const mobileSubmenu = header.querySelector<HTMLElement>('[data-mobile-submenu]')
+    const mobileChevron = header.querySelector<HTMLElement>('[data-mobile-chevron]')
+
+    function closeMobileProjects() {
+      if (!mobileSubmenu) return
+      isMobileProjectsOpen = false
+      mobileChevron?.classList.remove('rotate-180')
+      mobileToggle?.setAttribute('aria-expanded', 'false')
+      gsap.killTweensOf(mobileSubmenu)
+      gsap.to(mobileSubmenu, { height: 0, opacity: 0, duration: 0.22, ease: 'power2.in' })
+    }
+
+    mobileToggle?.addEventListener('click', () => {
+      if (!mobileSubmenu) return
+      isMobileProjectsOpen = !isMobileProjectsOpen
+      gsap.killTweensOf(mobileSubmenu)
+      if (isMobileProjectsOpen) {
+        mobileChevron?.classList.add('rotate-180')
+        mobileToggle?.setAttribute('aria-expanded', 'true')
+        gsap.fromTo(
+          mobileSubmenu,
+          { height: 0, opacity: 0 },
+          { height: 'auto', opacity: 1, duration: 0.32, ease: 'power3.out' }
+        )
+      } else {
+        closeMobileProjects()
+      }
+    })
+
+    const desktopTrigger = header.querySelector<HTMLElement>('[data-projects-trigger]')
+    const desktopDropdown = header.querySelector<HTMLElement>('[data-desktop-dropdown]')
+    const desktopChevron = header.querySelector<HTMLElement>('[data-chevron]')
+
+    const openDesktop = () => {
+      if (!desktopDropdown) return
+      desktopChevron?.classList.add('rotate-180')
+      desktopDropdown.classList.add('pointer-events-auto')
+      desktopDropdown.classList.remove('pointer-events-none')
+      gsap.killTweensOf(desktopDropdown)
+      gsap.fromTo(
+        desktopDropdown,
+        { opacity: 0, y: -10, scaleY: 0.92, transformOrigin: 'top center' },
+        { opacity: 1, y: 0, scaleY: 1, duration: 0.32, ease: 'power3.out' }
+      )
+    }
+
+    const closeDesktop = () => {
+      if (!desktopDropdown) return
+      desktopChevron?.classList.remove('rotate-180')
+      desktopDropdown.classList.remove('pointer-events-auto')
+      desktopDropdown.classList.add('pointer-events-none')
+      gsap.killTweensOf(desktopDropdown)
+      gsap.to(desktopDropdown, {
+        opacity: 0,
+        y: -8,
+        scaleY: 0.94,
+        transformOrigin: 'top center',
+        duration: 0.2,
+        ease: 'power2.in',
+      })
+    }
+
+    const currentPath = window.location.pathname
+    const isProjectsPage = currentPath.replace(/\/$/, '') === '/projects'
+    const desktopFilters = header.querySelectorAll<HTMLElement>('[data-nav-filter]')
+    const mobileFilters = header.querySelectorAll<HTMLElement>('[data-mobile-filter]')
+
+    if (isProjectsPage) {
+      const activeCat = new URL(window.location.href).searchParams.get('category') || 'All'
+      desktopFilters.forEach((el) => {
+        const isActive = el.dataset.navFilter === activeCat
+        el.classList.toggle('text-primary', isActive)
+        el.classList.toggle('text-charcoal', !isActive)
+      })
+      mobileFilters.forEach((el) => {
+        const isActive = el.dataset.mobileFilter === activeCat
+        el.classList.toggle('text-primary', isActive)
+        el.classList.toggle('text-charcoal', !isActive)
+      })
+    } else {
+      desktopFilters.forEach((el) => {
+        el.classList.remove('text-primary')
+        el.classList.add('text-charcoal')
+      })
+      mobileFilters.forEach((el) => {
+        el.classList.remove('text-primary')
+        el.classList.add('text-charcoal')
+      })
+    }
+
+    desktopTrigger?.addEventListener('mouseenter', openDesktop)
+    desktopTrigger?.addEventListener('mouseleave', closeDesktop)
+  }
+
+  initNavbar()
+  document.addEventListener('astro:page-load', initNavbar)
+</script>

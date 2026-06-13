@@ -1,0 +1,45 @@
+---
+import fs from 'node:fs'
+import path from 'node:path'
+
+interface Props {
+  src: string
+  class?: string
+  [key: string]: any
+}
+
+const { src, class: className, ...rest } = Astro.props
+
+let svgContent = ''
+try {
+  let rawSvg = ''
+  if (typeof src === 'string' && src.startsWith('http')) {
+    const res = await fetch(src)
+    rawSvg = await res.text()
+  } else if (typeof src === 'string') {
+    const publicDir = path.resolve('./public')
+    const filePath = path.join(publicDir, src.replace(/^\/+/, ''))
+    rawSvg = fs.readFileSync(filePath, 'utf-8')
+  }
+
+  if (rawSvg) {
+    const attributes = Object.entries(rest)
+      .map(([key, val]) => `${key}="${val}"`)
+      .join(' ')
+
+    svgContent = rawSvg.replace(/<svg([^>]*)>/, (match, existingAttrs) => {
+      let mergedClass = className || ''
+      const classMatch = existingAttrs.match(/class="([^"]*)"/)
+      if (classMatch) {
+        mergedClass = `${classMatch[1]} ${mergedClass}`.trim()
+        existingAttrs = existingAttrs.replace(/class="[^"]*"/, '')
+      }
+      return `<svg class="${mergedClass}" ${attributes} ${existingAttrs.trim()}>`
+    })
+  }
+} catch (e) {
+  console.error(`Failed to read SVG file at: ${src}`, e)
+}
+---
+
+<Fragment set:html={svgContent} />

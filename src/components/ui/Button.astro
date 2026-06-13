@@ -1,0 +1,44 @@
+---
+import { cn } from '@/lib/utils'
+
+interface Props {
+  variant?: 'primary' | 'outline' | 'ghost'
+  size?: 'sm' | 'md' | 'lg'
+  href?: string
+  class?: string
+  [key: string]: unknown
+}
+
+const variants = {
+  primary: 'text-gray-900 bg-white hover:bg-gray-100 border border-white/20',
+  outline: 'text-white bg-white/5 hover:bg-white/10 border border-white/10',
+  ghost: 'text-white/80 hover:text-white hover:bg-white/10',
+}
+
+const sizes = {
+  sm: 'h-9 px-4 py-2 text-sm',
+  md: 'h-11 px-5 py-3 text-base',
+  lg: 'h-12 px-6 py-3.5 text-lg',
+}
+
+const { variant = 'primary', size = 'md', href, class: className, ...rest } = Astro.props
+
+const classes = cn(
+  'inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md font-medium transition-all outline-none cursor-pointer',
+  variants[variant],
+  sizes[size],
+  className
+)
+---
+
+{
+  href ? (
+    <a href={href} class={classes} {...rest}>
+      <slot />
+    </a>
+  ) : (
+    <button class={classes} {...rest}>
+      <slot />
+    </button>
+  )
+}

@@ -12,9 +12,6 @@ const { PUBLIC_SANITY_STUDIO_PROJECT_ID, PUBLIC_SANITY_STUDIO_DATASET, PUBLIC_SI
   ''
 )
 
-// Only enable Sanity when a real project id is set. A valid Sanity projectId is
-// lowercase a-z, 0-9 and dashes — so the `.env.example` placeholder (or an empty
-// value) is ignored and the welcome page boots without a Sanity project.
 const hasValidProjectId = /^[a-z0-9-]+$/.test(PUBLIC_SANITY_STUDIO_PROJECT_ID ?? '')
 
 const sanityIntegration = hasValidProjectId

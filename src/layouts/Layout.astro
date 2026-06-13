@@ -63,7 +63,7 @@ const ogImageURL = ogImage ? new URL(ogImage, SITE) : null
     <meta name="twitter:image" content={ogImageURL} />
     <ClientRouter />
   </head>
-  <body class="min-h-screen w-full overflow-x-hidden">
+  <body class="min-h-screen w-full bg-background overflow-x-hidden">
     <Navbar />
     <main>
       <slot />

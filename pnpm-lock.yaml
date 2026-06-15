@@ -26,6 +26,9 @@ importers:
       '@sanity/image-url':
         specifier: ^2.1.1
         version: 2.1.1
+      '@sanity/webhook':
+        specifier: ^4.0.4
+        version: 4.0.4
       astro:
         specifier: ^6.3.5
         version: 6.4.6(@vercel/functions@3.7.1(ws@8.21.0))(jiti@2.7.0)(lightningcss@1.32.0)(rollup@4.61.1)(tsx@4.22.4)(yaml@2.9.0)
@@ -2550,6 +2553,10 @@ packages:
         optional: true
       svelte:
         optional: true
+
+  '@sanity/webhook@4.0.4':
+    resolution: {integrity: sha512-c8LmzR5Wx93zJ10ohhp0XlmPrTNSFyvPcLbNY/sN45Wj5VOngz4FbBMbX9j64sSQLt+676U6OhiVfjs1yw3YCw==}
+    engines: {node: '>=20.0.0'}
 
   '@sanity/worker-channels@2.0.0':
     resolution: {integrity: sha512-mC+8yPQuw2rHXdHigFPU9thNa6vTaPmh7jFR6RvloE8s+6dmnk9bHdPXRbrrUqafxzK3L9aH2E170ubXyxcAIA==}
@@ -9042,6 +9049,8 @@ snapshots:
       - '@sanity/types'
       - react-is
       - typescript
+
+  '@sanity/webhook@4.0.4': {}
 
   '@sanity/worker-channels@2.0.0': {}
 

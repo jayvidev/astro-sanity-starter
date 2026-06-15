@@ -49,3 +49,7 @@ export function getSettingsView(): Promise<SettingsView> {
   }
   return settingsPromise
 }
+
+export function resetContentCache(): void {
+  settingsPromise = null
+}

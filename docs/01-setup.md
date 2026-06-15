@@ -4,7 +4,23 @@
 
 - Node 24 (Vercel runtime; Node 25 builds locally but warns).
 - pnpm.
-- A Sanity account + project.
+- A Sanity account + project — **optional to start** (see Quick start).
+
+## Quick start — no Sanity needed
+
+You can develop the whole UI before touching Sanity. With an empty or placeholder
+env the content layer serves **typed fallbacks** (you'll see a one-line
+`[sanity] query failed — using fallback content` warning, which is expected):
+
+```bash
+pnpm install
+pnpm dev          # runs at http://localhost:4321 with fallback content
+```
+
+Build pages against `get*View()` + the `*View` types (see
+[03 — Add a resource](./03-add-resource.md), "build the page first"). When you're
+ready, set `PUBLIC_SANITY_STUDIO_PROJECT_ID` to a real id and the data lights up —
+no code change. The full setup below is for when you reach that point.
 
 ## 1. Install
 

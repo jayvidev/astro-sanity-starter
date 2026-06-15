@@ -11,7 +11,9 @@ You don't have to model Sanity before you design. The content layer (`content.ts
 3. **Build the components** against `get*View()` + the `*View` type. Never hardcode copy inside the `.astro` markup.
 4. **Later, add Sanity**: schema → projection → `to*View` mapper, then point `get*View()` at the mapped document instead of the fallback. **The components don't change.**
 
-`fallbackSettings` + `getSettingsView()` in `content.ts` is the live reference: it serves typed data with no Sanity wired (the `SANITY_CONFIGURED` guard skips the query and falls back). Copy that shape per page/section.
+`fallbackSettings` + `getSettingsView()` in `content.ts` is the live reference: it queries Sanity and **falls back to typed defaults when nothing is configured**, so the page runs before you wire the CMS — and lights up automatically once you set a real `PUBLIC_SANITY_STUDIO_PROJECT_ID` (no code change). Copy that shape per page/section.
+
+> The starter is **forgiving by design** (graceful fallbacks) so you can develop with zero Sanity. A matured project can instead be **strict** — `throw` when a required document is missing, so a CMS failure is loud in production rather than silently serving placeholders. That's a per-project lifecycle decision, not something the starter forces.
 
 > **Anti-pattern:** hardcoding copy inside `.astro` components and migrating it field-by-field later. That scatters content across the tree and turns the Sanity migration into a find-and-replace slog. Keep copy in `content.ts` from day one — one file to swap when you wire the CMS.
 

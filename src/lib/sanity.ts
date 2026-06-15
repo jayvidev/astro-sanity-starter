@@ -9,22 +9,20 @@ export function urlForImage(source: SanityImageSource) {
   return builder.image(source)
 }
 
-const projectId = import.meta.env.PUBLIC_SANITY_STUDIO_PROJECT_ID
-const SANITY_CONFIGURED = !!projectId && /^[a-z0-9-]+$/.test(projectId) && projectId !== '00000000'
-
 async function loadQuery<T>(
   query: string,
   params: Record<string, unknown> = {}
 ): Promise<T | null> {
-  if (!SANITY_CONFIGURED) return null
-
   try {
     return await sanityClient.fetch<T>(query, params, {
       perspective: 'published',
       useCdn: false,
     })
   } catch (err) {
-    console.error('Error fetching from Sanity:', err)
+    console.warn(
+      '[sanity] query failed — using fallback content:',
+      err instanceof Error ? err.message : err
+    )
     return null
   }
 }

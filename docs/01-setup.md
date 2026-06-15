@@ -68,6 +68,6 @@ pnpm dev:studio   # studio → http://localhost:3333
 
 ## 5. Seed content
 
-The site renders from Sanity, so empty singletons will produce empty (or build-erroring) pages. In the Studio, fill at least: **Site Settings**, **Home**, **About**, **Contact**, **Services Page**, and create a few Projects/Services/Blog posts. New `siteSettings` business fields ship with sensible `initialValue` defaults.
+The site renders from Sanity, so empty singletons will produce empty (or build-erroring) pages. In the Studio, fill at least: **Site Settings** and **Home**, and create any other collections you define. New `siteSettings` business fields ship with sensible `initialValue` defaults.
 
 Next: [02 — Architecture](./02-architecture.md).

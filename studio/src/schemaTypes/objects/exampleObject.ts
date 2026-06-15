@@ -1,12 +1,13 @@
+/*
 import {defineField, defineType} from 'sanity'
 
 /**
- * A single service highlight: short title + description.
- * Mirrors ServiceHighlight in the frontend TS data.
- */
+ * Example of a reusable object (a bundle of fields you can use in multiple documents)
+ * Uncomment this file and import it in `index.ts` to use it.
+ *\/
 export default defineType({
-  name: 'serviceHighlight',
-  title: 'Highlight',
+  name: 'exampleObject',
+  title: 'Example Object',
   type: 'object',
   fields: [
     defineField({
@@ -19,10 +20,8 @@ export default defineType({
       name: 'description',
       title: 'Description',
       type: 'text',
-      rows: 2,
+      rows: 3,
     }),
   ],
-  preview: {
-    select: {title: 'title', subtitle: 'description'},
-  },
 })
+*/

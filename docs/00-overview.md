@@ -1,6 +1,6 @@
 # 00 — Overview
 
-A statically-built marketing site (Astro 6) whose content lives entirely in a Sanity Studio. Two halves:
+A starter template for a statically-built marketing site (Astro 6) whose content lives entirely in a Sanity Studio. Two halves:
 
 - **Frontend** (repo root) — Astro pages compiled to static HTML, deployed to Vercel. Fetches all content from Sanity at build time.
 - **Studio** (`/studio`) — the Sanity editing app. Its own pnpm workspace, deployed separately to `*.sanity.studio`.
@@ -25,16 +25,7 @@ The **View layer** is the contract. Components depend on `*View` types, not on S
 
 The frontend ships only a standalone **welcome page** (`/`) plus `sitemap.xml`. Everything else is a **schema skeleton** ready in Sanity — wire each page as you build (see [03 — Add a resource](./03-add-resource.md)).
 
-Schemas provided to build against:
 
-| Intended route | Source | Skeleton content |
-|-------|--------|-------|
-| Home | `home` singleton | Hero, About, Editorial blocks, Documents, Process, Testimonials |
-| About | `about` singleton | Intro, specializations, milestones, team, stats |
-| Services | `servicesPage` + `service` collection | FAQ + per-service detail |
-| Projects | `project` collection | Portfolio grid + detail |
-| Blog | `blogPost` collection | List + article |
-| Contact | `contact` singleton | Form fields + info |
 
 ## Cross-cutting
 

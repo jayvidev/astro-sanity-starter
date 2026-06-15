@@ -16,13 +16,13 @@
 
 </div>
 
-A statically-rendered, CMS-driven site starter: **Astro 6** frontend + a **Sanity** Studio for content. Ships a clean welcome page and a full **Sanity schema skeleton** (singletons + orderable collections + reusable objects) wired through a typed view-adapter data layer. Build your pages on top.
+A statically-rendered, CMS-driven site starter: **Astro 6** frontend + a **Sanity** Studio for content. Ships a clean welcome page and a **Sanity schema skeleton** wired through a typed view-adapter data layer. Build your pages on top.
 
 ## What you get
 
 - **Astro 6**, static output, Vercel adapter, TypeScript strict, Tailwind v4 (via `@tailwindcss/vite`), Onest font.
 - **Welcome page** that boots with an empty `.env` — no Sanity required to see it run.
-- **Sanity Studio** in [`/studio`](./studio) — its own pnpm workspace (separate deps + lockfile) so the static site stays lean. Singletons (Home, About, Contact, Services Page, Site Settings), orderable collections (Projects, Blog, Services), reusable objects — all a generic skeleton to fill in.
+- **Sanity Studio** in [`/studio`](./studio) — its own pnpm workspace (separate deps + lockfile) so the static site stays lean. Singletons (Home, Site Settings), orderable collections, reusable objects — all a generic skeleton to fill in.
 - **View-adapter data layer**: GROQ + raw types in [`src/lib/sanity.ts`](./src/lib/sanity.ts) → mapped "View" shapes in [`src/lib/content.ts`](./src/lib/content.ts) → components. **Components never touch Sanity** — swap the data source without touching the UI.
 - Editor-managed **structured data** (schema.org JSON-LD) built in [`src/lib/structured-data.ts`](./src/lib/structured-data.ts) from `siteSettings`.
 - Layout chrome (Navbar, Footer), smooth scroll (Lenis), view transitions, and scroll-reveal animations as scaffolding.

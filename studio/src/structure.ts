@@ -1,22 +1,14 @@
 import type {StructureResolver} from 'sanity/structure'
-import {orderableDocumentListDeskItem} from '@sanity/orderable-document-list'
 import {
   HomeIcon,
-  UsersIcon,
-  EnvelopeIcon,
-  DocumentsIcon,
-  ImagesIcon,
-  ProjectsIcon,
   CogIcon,
 } from '@sanity/icons'
 
 /**
  * Custom Studio structure.
  * - "Pages" groups single-instance documents (singletons) like Home.
- * - Collections use orderable (drag-and-drop) lists so editors control the
- *   order shown on the site.
  */
-export const structure: StructureResolver = (S, context) =>
+export const structure: StructureResolver = (S) =>
   S.list()
     .title('Content')
     .items([
@@ -31,43 +23,6 @@ export const structure: StructureResolver = (S, context) =>
                 .id('home')
                 .icon(HomeIcon)
                 .child(S.document().schemaType('home').documentId('home')),
-              S.listItem()
-                .title('About')
-                .id('about')
-                .icon(UsersIcon)
-                .child(S.document().schemaType('about').documentId('about')),
-              S.listItem()
-                .title('Contact')
-                .id('contact')
-                .icon(EnvelopeIcon)
-                .child(S.document().schemaType('contact').documentId('contact')),
-              S.listItem()
-                .title('Services Page')
-                .id('servicesPage')
-                .icon(DocumentsIcon)
-                .child(S.document().schemaType('servicesPage').documentId('servicesPage')),
-              S.divider(),
-              orderableDocumentListDeskItem({
-                type: 'project',
-                title: 'Projects',
-                icon: ProjectsIcon,
-                S,
-                context,
-              }),
-              orderableDocumentListDeskItem({
-                type: 'blogPost',
-                title: 'Blog posts',
-                icon: DocumentsIcon,
-                S,
-                context,
-              }),
-              orderableDocumentListDeskItem({
-                type: 'service',
-                title: 'Services',
-                icon: ImagesIcon,
-                S,
-                context,
-              }),
             ]),
         ),
       S.divider(),

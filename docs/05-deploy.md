@@ -83,6 +83,6 @@ Deploys to `https://<project>.sanity.studio`. First deploy asks for a studio hos
 
 - [ ] `pnpm build` succeeds locally
 - [ ] `pnpm lint` clean
-- [ ] All required singletons published in Sanity (Site Settings, Home, About, Contact, Services Page)
+- [ ] All required singletons published in Sanity (Site Settings, Home, etc.)
 - [ ] `PUBLIC_SITE_URL` set to the real domain (used by canonical URLs, OG tags, sitemap, JSON-LD)
 - [ ] Content freshness handled: **either** a deploy webhook (full rebuild on publish) **or** on-demand revalidation (`VERCEL_REVALIDATE_TOKEN` + `SANITY_REVALIDATE_SECRET` set, webhook → `/api/revalidate`)

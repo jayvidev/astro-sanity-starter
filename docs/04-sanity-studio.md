@@ -7,9 +7,8 @@ The Studio lives in [`/studio`](../studio) as an independent pnpm workspace.
 ```
 studio/src/schemaTypes/
   singletons/   # one-of documents, edited via fixed list items
-    home, about, contact, servicesPage, siteSettings
+    home, siteSettings
   collections/  # many documents, drag-and-drop orderable
-    project, blogPost, service
   objects/      # reusable embedded field groups (no standalone documents)
     seoFields, editorialBlock, testimonial, processStep, teamMember,
     heroFeature, documentItem, internalLink, ...
@@ -25,9 +24,9 @@ studio/src/schemaTypes/
 ```
 Content
   ├─ Pages
-  │   ├─ Home / About / Contact / Services Page   (singletons, with icons)
+  │   ├─ Home                                     (singleton, with icon)
   │   ├─ ───
-  │   ├─ Projects / Blog posts / Services          (orderable collections)
+  │   ├─ Custom Collections                        (orderable collections)
   └─ Site Settings                                  (singleton)
 ```
 
@@ -37,7 +36,7 @@ Each item carries an `@sanity/icons` icon for quick visual scanning.
 
 - **Group long documents** with `groups: [...]` + `group: 'name'` per field (see `home.ts`, `siteSettings.ts`). Tabs beat one endless scroll.
 - **Validate** with `Rule.required()` and `.max(n)` on text fields so layouts don't break from over-long copy.
-- **`description`** on a field is the editor's only inline guidance — add it wherever the field's purpose isn't obvious from the title. (Current coverage is thin on the `home`/`about` singletons; worth a pass when onboarding a non-technical client.)
+- **`description`** on a field is the editor's only inline guidance — add it wherever the field's purpose isn't obvious from the title. (Current coverage is thin on the `home` singleton; worth a pass when onboarding a non-technical client.)
 - **`preview`** with `media` on collection items gives a thumbnail list instead of opaque rows.
 - **Image alt text**: the `imageWithAlt` helper (in `home.ts`) attaches an `alt` field — prefer it for content images (a11y + SEO).
 

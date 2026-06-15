@@ -33,9 +33,8 @@ pnpm dev      # http://localhost:3333
 
 ## 3. Fill the content
 
-The schema ships as a skeleton — open each singleton (Site Settings, Home, About,
-Contact, Services Page) and the collections (Projects, Blog, Services) and fill in
-your own content. Field descriptions explain what each one is for.
+The schema ships as a skeleton — open each singleton (Site Settings, Home)
+and create any collections you need, then fill in your own content. Field descriptions explain what each one is for.
 
 ## 4. Deploy the Studio
 

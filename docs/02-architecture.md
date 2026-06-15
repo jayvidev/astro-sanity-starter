@@ -25,8 +25,8 @@ src/
 
 studio/                # separate Sanity workspace (own deps + lockfile)
   src/schemaTypes/
-    singletons/   # home, about, contact, servicesPage, siteSettings
-    collections/  # project, blogPost, service (orderable)
+    singletons/   # home, siteSettings
+    collections/  # custom orderable collections
     objects/      # reusable field groups (editorialBlock, seoFields, testimonial, ...)
     index.ts      # registers every type
   src/structure.ts     # custom Studio desk (Pages / collections / Site Settings)

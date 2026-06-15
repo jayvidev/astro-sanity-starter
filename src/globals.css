@@ -19,7 +19,8 @@
 .bg-background {
   background:
     radial-gradient(ellipse 80% 80% at 20% 0%, rgba(236, 72, 153, 0.15), transparent),
-    radial-gradient(ellipse 80% 80% at 80% -10%, rgba(244, 244, 245, 0.12), transparent), rgb(9 9 11);
+    radial-gradient(ellipse 80% 80% at 80% -10%, rgba(244, 244, 245, 0.12), transparent),
+    rgb(9 9 11);
 }
 
 @layer base {

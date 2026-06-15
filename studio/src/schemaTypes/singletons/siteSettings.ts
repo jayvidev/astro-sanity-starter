@@ -75,7 +75,8 @@ export default defineType({
     defineField({
       name: 'structuredAddress',
       title: 'Structured Address',
-      description: 'Postal parts used by JSON-LD (the flat "Company Address" above is display-only).',
+      description:
+        'Postal parts used by JSON-LD (the flat "Company Address" above is display-only).',
       type: 'object',
       group: 'business',
       options: {collapsible: true, collapsed: true},
@@ -99,15 +100,7 @@ export default defineType({
           type: 'array',
           of: [{type: 'string'}],
           options: {
-            list: [
-              'Monday',
-              'Tuesday',
-              'Wednesday',
-              'Thursday',
-              'Friday',
-              'Saturday',
-              'Sunday',
-            ],
+            list: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
           },
           initialValue: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
         }),

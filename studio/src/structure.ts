@@ -1,8 +1,5 @@
 import type {StructureResolver} from 'sanity/structure'
-import {
-  HomeIcon,
-  CogIcon,
-} from '@sanity/icons'
+import {HomeIcon, CogIcon} from '@sanity/icons'
 
 /**
  * Custom Studio structure.

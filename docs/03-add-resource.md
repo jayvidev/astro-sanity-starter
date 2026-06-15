@@ -2,6 +2,21 @@
 
 Walkthrough for adding a new content type. Example: a **Testimonials page** collection of `caseStudy` documents. The same five steps cover singletons, collections, and embedded objects.
 
+## Workflow: build the page first, wire Sanity later
+
+You don't have to model Sanity before you design. The content layer (`content.ts`) is a **seam**: components depend on a `*View` _shape_, not on where the data comes from. Build in this order and the migration is almost free:
+
+1. **Define the `*View` type** for what the section needs (`HomeHeroView`, etc.).
+2. **Return a typed hardcoded fallback** from `get*View()` — real-looking copy, typed as the `*View`. The page now works with **zero Sanity**.
+3. **Build the components** against `get*View()` + the `*View` type. Never hardcode copy inside the `.astro` markup.
+4. **Later, add Sanity**: schema → projection → `to*View` mapper, then point `get*View()` at the mapped document instead of the fallback. **The components don't change.**
+
+`fallbackSettings` + `getSettingsView()` in `content.ts` is the live reference: it serves typed data with no Sanity wired (the `SANITY_CONFIGURED` guard skips the query and falls back). Copy that shape per page/section.
+
+> **Anti-pattern:** hardcoding copy inside `.astro` components and migrating it field-by-field later. That scatters content across the tree and turns the Sanity migration into a find-and-replace slog. Keep copy in `content.ts` from day one — one file to swap when you wire the CMS.
+
+The five steps below are the "wire Sanity" half (step 4 above), shown end-to-end.
+
 ## 1. Schema (Studio)
 
 Create `studio/src/schemaTypes/collections/caseStudy.ts`:

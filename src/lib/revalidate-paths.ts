@@ -4,8 +4,8 @@
  * STATIC_PAGES list and the switch below to match the routes you actually build.
  *
  * The starter only ships `/` and `/sitemap.xml`, so only those are wired here.
- * Commented branches show the conventional mapping for the other schema types —
- * uncomment and adjust as you add their pages.
+ * Commented branches show the conventional mapping for custom schema types —
+ * uncomment and adjust as you add your own pages.
  */
 
 export interface WebhookPayload {
@@ -24,24 +24,16 @@ export async function pathsForDocument(doc: WebhookPayload): Promise<string[]> {
       return ['/']
 
     // Singletons — map each to its page route once you build it:
-    // case 'about':
-    //   return ['/about']
-    // case 'contact':
-    //   return ['/contact']
-    // case 'servicesPage':
-    //   return ['/services']
+    // case 'customSingleton':
+    //   return ['/custom-page']
 
     // siteSettings is global (nav, SEO, footer…) → revalidate everything:
     case 'siteSettings':
       return allPaths()
 
     // Collections — detail page + index + sitemap:
-    // case 'project':
-    //   return slug ? [`/projects/${slug}`, '/projects', '/sitemap.xml'] : ['/projects', '/sitemap.xml']
-    // case 'service':
-    //   return slug ? [`/services/${slug}`, '/services', '/sitemap.xml'] : ['/services', '/sitemap.xml']
-    // case 'blogPost':
-    //   return slug ? [`/blog/${slug}`, '/blog', '/sitemap.xml'] : ['/blog', '/sitemap.xml']
+    // case 'exampleCollection':
+    //   return slug ? [`/collection/${slug}`, '/collection', '/sitemap.xml'] : ['/collection', '/sitemap.xml']
 
     default:
       return []
@@ -52,8 +44,8 @@ export async function pathsForDocument(doc: WebhookPayload): Promise<string[]> {
  * Every revalidatable path. Used when a global document (siteSettings) changes.
  * Extend with collection detail pages once you wire their content mappers, e.g.:
  *
- *   const [projects] = await Promise.all([getProjectViews()])
- *   return [...STATIC_PAGES, ...projects.map((p) => `/projects/${p.slug}`)]
+ *   const [customDocs] = await Promise.all([getCustomViews()])
+ *   return [...STATIC_PAGES, ...customDocs.map((p) => `/collection/${p.slug}`)]
  */
 async function allPaths(): Promise<string[]> {
   return [...STATIC_PAGES]

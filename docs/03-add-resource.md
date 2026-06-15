@@ -15,6 +15,41 @@ You don't have to model Sanity before you design. The content layer (`content.ts
 
 > The starter is **forgiving by design** (graceful fallbacks) so you can develop with zero Sanity. A matured project can instead be **strict** — `throw` when a required document is missing, so a CMS failure is loud in production rather than silently serving placeholders. That's a per-project lifecycle decision, not something the starter forces.
 
+## Going strict (production upgrade)
+
+When the project is fully wired and you no longer want silent fallbacks, flip two things:
+
+**`src/lib/sanity.ts`** — remove the try/catch, return `T` directly:
+
+```ts
+async function loadQuery<T>(query: string, params: Record<string, unknown> = {}): Promise<T> {
+  return sanityClient.fetch<T>(query, params, {
+    perspective: 'published',
+    useCdn: false,
+  })
+}
+```
+
+**`src/lib/content.ts`** — remove `?? fallback` guards from singletons; let missing documents throw:
+
+```ts
+// Forgiving (starter default):
+export async function getHomeView(): Promise<HomeView> {
+  const data = await getHome()
+  return data ? toHome(data) : fallbackHome
+}
+
+// Strict (production):
+export function getHomeView(): Promise<HomeView> {
+  if (!homePromise) homePromise = getHome().then(toHome)
+  return homePromise
+}
+```
+
+Collections drop the `?? []` fallback the same way — a missing collection should surface as an error, not an empty page.
+
+The `*View` types, components, and pages stay identical. Only the data layer changes.
+
 > **Anti-pattern:** hardcoding copy inside `.astro` components and migrating it field-by-field later. That scatters content across the tree and turns the Sanity migration into a find-and-replace slog. Keep copy in `content.ts` from day one — one file to swap when you wire the CMS.
 
 The five steps below are the "wire Sanity" half (step 4 above), shown end-to-end.

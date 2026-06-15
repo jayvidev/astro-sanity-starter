@@ -1,6 +1,6 @@
 # Sanity Webhook → On-demand Revalidation
 
-How to wire the Sanity webhook that revalidates static pages when content is published. The site is `output: 'static'` with ISR, so publishing in the Studio fires a webhook to `/api/revalidate`, which regenerates only the affected pages.
+How to wire the Sanity webhook that revalidates static pages when content is published. In an Astro project using `output: 'static'` with Vercel ISR, publishing in the Studio fires a webhook to `/api/revalidate`, which regenerates only the affected pages.
 
 - Endpoint: [`src/pages/api/revalidate.ts`](../src/pages/api/revalidate.ts)
 - Type → route map: [`src/lib/revalidate-paths.ts`](../src/lib/revalidate-paths.ts)
@@ -13,10 +13,10 @@ https://www.sanity.io/manage → select the project → **API → Webhooks → C
 
 | Field | Value |
 |---|---|
-| **Name** | `revalidate` (any label) |
+| **Name** | `Astro ISR` (any label) |
 | **Description** | "Revalidates ISR pages on publish" (optional) |
 | **URL** | `https://YOUR_DOMAIN/api/revalidate` |
-| **Dataset** | `production` |
+| **Dataset** | `production` (or your target dataset) |
 | **Trigger on** | ✅ Create &nbsp; ✅ Update &nbsp; ✅ Delete |
 | **Filter** | see below (optional but recommended) |
 | **Projection** | `{ _type, _id, "slug": slug.current }` |
@@ -30,13 +30,14 @@ https://www.sanity.io/manage → select the project → **API → Webhooks → C
 
 ### Filter (GROQ)
 
-Only trigger on the document types the code actually maps:
+Only trigger on the document types the code actually maps. To find which types to include, check the `pathsForDocument()` function in `src/lib/revalidate-paths.ts` and add all the `case` values to this list.
 
+For example, depending on your Sanity schema structure:
 ```groq
-_type in ["home", "about", "contact", "servicesPage", "siteSettings", "project", "blogPost", "service"]
+_type in ["page", "post", "project", "siteSettings"]
 ```
 
-Empty filter also works — unmapped types just return `{ revalidated: false }` — but the explicit list cuts noise.
+An empty filter also works — unmapped types just return `{ revalidated: false }` — but the explicit list cuts down on unnecessary API calls.
 
 ### Projection (GROQ)
 
@@ -57,20 +58,15 @@ Both must be set or `/api/revalidate` returns `500`.
 
 ## Type → route map
 
-What each `_type` revalidates (from [`revalidate-paths.ts`](../src/lib/revalidate-paths.ts)):
+The exact mapping of which `_type` revalidates which routes is defined in [`revalidate-paths.ts`](../src/lib/revalidate-paths.ts). 
 
-| `_type` | Revalidates |
-|---|---|
-| `home` | `/` |
-| `about` | `/about` |
-| `contact` | `/contact` |
-| `servicesPage` | `/services` |
-| `siteSettings` | **all paths** (static pages + every project/service/blog slug) |
-| `project` | `/projects/{slug}`, `/projects`, `/sitemap.xml` |
-| `blogPost` | `/blog/{slug}`, `/blog`, `/sitemap.xml` |
-| `service` | `/services/{slug}`, `/services`, `/sitemap.xml` |
+Depending on your specific Sanity schema, you should map your document types to their corresponding front-end routes.
 
-Added a new collection type? Add a `case` in `pathsForDocument()` and append the `_type` to the webhook filter.
+**How to configure the route mapping:**
+Whenever you have a collection or document type in Sanity that has a frontend page, make sure to:
+1. Open `src/lib/revalidate-paths.ts`.
+2. Add a `case` for your `_type` inside the `pathsForDocument()` function, returning the array of paths that need to be revalidated when that document changes.
+3. Make sure that same `_type` is included in your webhook **Filter** in the Sanity dashboard.
 
 ## Flow
 

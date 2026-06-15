@@ -13,7 +13,10 @@ const {
   VERCEL_REVALIDATE_TOKEN,
 } = loadEnv(process.env.NODE_ENV ?? 'development', process.cwd(), '')
 
-const projectId = PUBLIC_SANITY_STUDIO_PROJECT_ID || '00000000'
+const isValidProjectId = (id) => !!id && /^[a-z0-9-]+$/.test(id)
+const projectId = isValidProjectId(PUBLIC_SANITY_STUDIO_PROJECT_ID)
+  ? PUBLIC_SANITY_STUDIO_PROJECT_ID
+  : '00000000'
 
 const sanityIntegration = [
   sanity({

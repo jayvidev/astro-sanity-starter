@@ -5,5 +5,6 @@ export const config = {
   revalidation: {
     sanitySecret: process.env.SANITY_REVALIDATE_SECRET || '',
     vercelBypassToken: process.env.VERCEL_REVALIDATE_TOKEN || '',
+    origin: process.env.REVALIDATE_ORIGIN || '',
   },
 } as const

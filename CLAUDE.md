@@ -1,6 +1,6 @@
 # CLAUDE.md
 
-Conventions for AI coding agents working on this starter (and projects derived from it).
+Conventions for AI coding agents working on this project.
 
 ## Stack & invariants
 
@@ -20,7 +20,7 @@ Sanity is reached through a **two-layer adapter**. Never break this:
 
 **Building a new page/section? Follow the design-first workflow in [docs/03-add-resource.md](./docs/03-add-resource.md):** define the `*View` type → return a typed hardcoded fallback from `get*View()` → build components against it → wire Sanity last. Never hardcode copy inside `.astro` markup — keep it in `content.ts` so the Sanity migration is one file, not a find-and-replace across the tree.
 
-- Singletons (`home`, `siteSettings`) are **request-cached** via a module-level promise (`let homePromise …`). Reuse that pattern for new singletons so multiple sections share one query per build.
+- Singletons (`home`, `about`, `contact`, `siteSettings`, `servicesPage`) are **request-cached** via a module-level promise (`let homePromise …`). Reuse that pattern for new singletons so multiple sections share one query per build.
 - Images: always go through `img(source, width)` in `content.ts` (calls `urlForImage().width().auto('format')`). Don't hand-build CDN URLs.
 - Internal links: resolve with `resolveLink()`; never render a raw `internalLink` object.
 

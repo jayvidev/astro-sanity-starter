@@ -41,6 +41,10 @@ Full walkthrough: [docs/03-add-resource.md](./docs/03-add-resource.md). Short ve
 4. `src/lib/content.ts` — `<Name>View` type + `to<Name>View` mapper + `get<Name>View()`.
 5. Render in a page/section using `get<Name>View()`.
 
+## Internationalization (i18n)
+
+If you need to support multiple languages, you must follow the architecture pattern defined in [docs/07-i18n.md](./docs/07-i18n.md) (Astro routing, Sanity document-level translation, and critical ISR cache clearing).
+
 ## Don'ts
 
 - Don't import `sanity:client` or `urlForImage` inside components — go through `content.ts`.

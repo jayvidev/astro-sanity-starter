@@ -16,16 +16,15 @@
 
 </div>
 
-A statically-rendered, CMS-driven site starter: **Astro 6** frontend + a **Sanity** Studio for content. Ships a clean welcome page and a **Sanity schema skeleton** wired through a typed view-adapter data layer. Build your pages on top.
+A statically-rendered, CMS-driven site starter: **Astro 6** frontend + a **Sanity** Studio for content. Built with a typed view-adapter data layer connecting Sanity directly to Astro components. Ships a clean welcome page and a **Sanity schema skeleton** to build your pages on top.
 
-## What you get
+## Tech Stack & Features
 
 - **Astro 6**, static output, Vercel adapter, TypeScript strict, Tailwind v4 (via `@tailwindcss/vite`), Onest font.
-- **Welcome page** that boots with an empty `.env` — no Sanity required to see it run.
 - **Sanity Studio** in [`/studio`](./studio) — its own pnpm workspace (separate deps + lockfile) so the static site stays lean. Singletons (Home, Site Settings), orderable collections, reusable objects — all a generic skeleton to fill in.
 - **View-adapter data layer**: GROQ + raw types in [`src/lib/sanity.ts`](./src/lib/sanity.ts) → mapped "View" shapes in [`src/lib/content.ts`](./src/lib/content.ts) → components. **Components never touch Sanity** — swap the data source without touching the UI.
 - Editor-managed **structured data** (schema.org JSON-LD) built in [`src/lib/structured-data.ts`](./src/lib/structured-data.ts) from `siteSettings`.
-- Layout chrome (Navbar, Footer), smooth scroll (Lenis), view transitions, and scroll-reveal animations as scaffolding.
+- Smooth scroll (Lenis), view transitions, and scroll-reveal animations (GSAP) as scaffolding.
 
 ## Quickstart
 
@@ -33,28 +32,22 @@ A statically-rendered, CMS-driven site starter: **Astro 6** frontend + a **Sanit
 pnpm install                 # frontend deps
 pnpm --dir studio install    # studio deps (separate workspace)
 
-pnpm dev                     # site → http://localhost:4321  (welcome page, no Sanity needed)
-```
-
-To wire the CMS, create a Sanity project and connect it:
-
-```bash
+# Make sure you have the .env.local with Sanity variables
 cp .env.example .env.local   # fill PUBLIC_SANITY_STUDIO_PROJECT_ID
+
+pnpm dev                     # site → http://localhost:4321
 pnpm dev:studio              # studio → http://localhost:3333
 ```
 
-See [docs/01-setup.md](./docs/01-setup.md).
+## Content Management
 
-## Build your site
+To edit the content of the pages, use the Sanity Studio:
 
-The frontend ships only the welcome page. To build real pages:
+1. Run the studio locally with `pnpm dev:studio`.
+2. Edit documents, update images, and publish changes.
+3. The frontend will fetch the latest content at build time (or you can view it live in dev mode).
 
-1. Fill the schema skeleton in the Studio (each field has a description).
-2. Read content with `get*View()` from [`src/lib/content.ts`](./src/lib/content.ts).
-3. Compose pages in `src/pages/` using the `Layout`, chrome, and UI primitives.
-4. Add a resource by following [docs/03-add-resource.md](./docs/03-add-resource.md).
-
-> Note: pages that query Sanity need `PUBLIC_SANITY_STUDIO_PROJECT_ID` set to build.
+> Note: Make sure `PUBLIC_SANITY_STUDIO_PROJECT_ID` and `PUBLIC_SANITY_STUDIO_DATASET` are set in your `.env.local`.
 
 ## Scripts
 
@@ -72,6 +65,8 @@ The frontend ships only the welcome page. To build real pages:
 4. [03 — Add a resource](./docs/03-add-resource.md)
 5. [04 — Sanity Studio](./docs/04-sanity-studio.md)
 6. [05 — Deploy](./docs/05-deploy.md)
+7. [06 — Sanity Webhook](./docs/06-sanity-webhook.md)
+8. [07 — Internationalization](./docs/07-i18n.md)
 
 Conventions for AI coding agents: [CLAUDE.md](./CLAUDE.md).
 

@@ -2,20 +2,25 @@ import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import Lenis from 'lenis'
 
+import 'lenis/dist/lenis.css'
+
 export function initSmoothScroll() {
   gsap.registerPlugin(ScrollTrigger)
   ScrollTrigger.config({ limitCallbacks: true })
 
   if (window.appLenis) {
     window.appLenis.destroy()
+    window.appLenis = undefined
   }
   if (window.lenisTicker) {
     gsap.ticker.remove(window.lenisTicker)
+    window.lenisTicker = undefined
   }
 
+  if (window.matchMedia('(pointer: coarse)').matches) return
+
   const lenis = new Lenis({
-    duration: 1.2,
-    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+    lerp: 0.1,
     orientation: 'vertical',
     gestureOrientation: 'vertical',
     smoothWheel: true,

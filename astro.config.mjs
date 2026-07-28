@@ -27,6 +27,28 @@ const sanityIntegration = [
   }),
 ]
 
+// @sanity/astro pre-bundles Studio-only deps via optimizeDeps.include. The Studio
+// lives in the separate /studio workspace, so these aren't installed in the root
+// and Vite logs "Failed to resolve dependency" warnings. Strip them — the public
+// site only consumes sanity:client, not the Studio UI.
+const stripStudioOptimizeDeps = () => ({
+  name: 'strip-studio-optimize-deps',
+  config(config) {
+    const drop = [
+      'react',
+      'react-dom',
+      'react-dom/client',
+      'react-compiler-runtime',
+      'react-is',
+      'styled-components',
+      'lodash/startCase.js',
+    ]
+    if (config.optimizeDeps?.include) {
+      config.optimizeDeps.include = config.optimizeDeps.include.filter((dep) => !drop.includes(dep))
+    }
+  },
+})
+
 export default defineConfig({
   site: PUBLIC_SITE_URL || '',
   output: 'static',
@@ -38,7 +60,7 @@ export default defineConfig({
   }),
   integrations: [...sanityIntegration],
   vite: {
-    plugins: [tailwindcss()],
+    plugins: [tailwindcss(), stripStudioOptimizeDeps()],
     resolve: {
       alias: {
         '@/': path.resolve('./src') + '/',

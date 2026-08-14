@@ -49,5 +49,6 @@
     "**/.vercel": true,
     "**/tsconfig.tsbuildinfo": true,
     "**/pnpm-lock.yaml": true
-  }
+  },
+  "css.lint.unknownAtRules": "ignore"
 }

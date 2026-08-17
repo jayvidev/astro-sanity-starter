@@ -48,6 +48,39 @@ So: keep marketing/static pages prerendered; mark Sanity-backed pages `prerender
 
 `revalidate-paths.ts` is the one project-specific file — map each `_type` to the routes it appears on.
 
+### Symptom: the webhook returns 200 but the page never changes
+
+The most common failure, and the most misleading — every layer reports success:
+
+- Sanity's webhook log: `200`.
+- Vercel's function log: `200`.
+- A manual `HEAD` with the right token: `200`.
+- The page: unchanged, `x-vercel-cache: HIT`, `age` climbing.
+
+Vercel answers `200` to the revalidation `HEAD` **whether or not it did anything**. A `200` proves the endpoint ran, not that a page regenerated. The real check is `age` in the response headers: after a successful revalidation it resets to `0`. If it keeps climbing, nothing happened.
+
+Two causes, in order of likelihood:
+
+**1. The page is prerendered.** A page with `prerender = true` is written to the deployment as a static file, and `handle: filesystem` serves it before any function is reached. Static files cannot be revalidated — only replaced by another build. Confirm by inspecting the build output:
+
+```bash
+pnpm build
+python3 -c "import json; d=json.load(open('.vercel/output/config.json')); print([r for r in d['routes'] if '_isr' in str(r)])"
+```
+
+An empty list means **no page is routed through ISR** — the adapter only emits `_isr` routes for non-prerendered routes:
+
+```js
+// @astrojs/vercel — same in v10 and v11
+if (!route.isPrerendered) routeDefinitions.push({ src, dest })
+```
+
+Fix: `export const prerender = false` on every Sanity-backed page, then redeploy once.
+
+**2. The `bypassToken` is stale.** `isr.bypassToken` is read by `loadEnv()` in `astro.config.mjs` at **build time** and baked into `.vercel/output/functions/_isr.prerender-config.json`. Vercel compares the `x-prerender-revalidate` header against that frozen value, not against the current environment variable. Setting or rotating `VERCEL_REVALIDATE_TOKEN` therefore requires a redeploy (without build cache) before revalidation works again.
+
+Note that `expiration: false` means pages never expire on their own. With either fault, published content stays frozen until the next deploy.
+
 ### The two tokens
 
 | Env var | Lives where | Purpose |

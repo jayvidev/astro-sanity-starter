@@ -46,7 +46,7 @@ Full walkthrough: [docs/03-add-resource.md](./docs/03-add-resource.md). Short ve
 If you need to support multiple languages, you must follow the architecture pattern defined in [docs/07-i18n.md](./docs/07-i18n.md) (Astro routing, Sanity document-level translation, and critical ISR cache clearing).
 
 ## Don'ts
-
+- Don't set `prerender = true` on a Sanity-backed page. Prerendered pages ship as static files and are served before any function, so the ISR webhook can never refresh them — content then only changes on redeploy ([docs/05](./docs/05-deploy.md)).
 - Don't import `sanity:client` or `urlForImage` inside components — go through `content.ts`.
 - Don't add a `tailwind.config.*` — this is Tailwind v4, configured in CSS.
 - Don't store secrets, API tokens, or SMTP passwords in Sanity documents.

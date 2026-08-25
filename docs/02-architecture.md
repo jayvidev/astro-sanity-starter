@@ -8,7 +8,7 @@ src/
     icons/        # inline SVG .astro icons
     layout/       # Navbar, Footer
     seo/          # JsonLd.astro
-    ui/           # reusable primitives: Button, RevealHeading, SmartLink, Icon
+    ui/           # reusable primitives: Button, etc.
   layouts/
     Layout.astro  # <head>, SEO/OG, Lenis, view transitions, navbar/footer slot
   lib/

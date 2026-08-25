@@ -27,7 +27,7 @@ try {
       .map(([key, val]) => `${key}="${val}"`)
       .join(' ')
 
-    svgContent = rawSvg.replace(/<svg([^>]*)>/, (match, existingAttrs) => {
+    svgContent = rawSvg.replace(/<svg([^>]*)>/, (_match, existingAttrs) => {
       let mergedClass = className || ''
       const classMatch = existingAttrs.match(/class="([^"]*)"/)
       if (classMatch) {

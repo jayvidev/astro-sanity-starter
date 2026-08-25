@@ -1,6 +1,7 @@
 import { isValidSignature, SIGNATURE_HEADER_NAME } from '@sanity/webhook'
 import type { APIRoute } from 'astro'
 import { lookup as dnsLookup } from 'node:dns/promises'
+import type { IncomingMessage } from 'node:http'
 import https from 'node:https'
 
 import { config } from '@/config'
@@ -28,7 +29,7 @@ const revalidatePath = (url: URL, token: string, connectIp?: string) =>
         method: 'HEAD',
         headers: { host: url.hostname, 'x-prerender-revalidate': token },
       },
-      (res) => {
+      (res: IncomingMessage) => {
         res.resume()
         const status = res.statusCode ?? 0
         resolve(status >= 200 && status < 300)

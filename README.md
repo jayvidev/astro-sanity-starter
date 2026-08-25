@@ -12,7 +12,6 @@
 ![Astro](https://img.shields.io/badge/Astro-16191f?style=flat&logo=astro&logoColor=white)
 ![Sanity](https://img.shields.io/badge/Sanity-0D0E12?style=flat&logo=sanity&logoColor=white)
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-06B6D4?logo=tailwindcss&logoColor=white&style=flat)
-![GSAP](https://img.shields.io/badge/GSAP-0AE448?style=flat&logo=gsap&logoColor=white)
 
 </div>
 
@@ -24,7 +23,7 @@ A statically-rendered, CMS-driven site starter: **Astro 6** frontend + a **Sanit
 - **Sanity Studio** in [`/studio`](./studio) — its own pnpm workspace (separate deps + lockfile) so the static site stays lean. Singletons (Home, Site Settings), orderable collections, reusable objects — all a generic skeleton to fill in.
 - **View-adapter data layer**: GROQ + raw types in [`src/lib/sanity.ts`](./src/lib/sanity.ts) → mapped "View" shapes in [`src/lib/content.ts`](./src/lib/content.ts) → components. **Components never touch Sanity** — swap the data source without touching the UI.
 - Editor-managed **structured data** (schema.org JSON-LD) built in [`src/lib/structured-data.ts`](./src/lib/structured-data.ts) from `siteSettings`.
-- Smooth scroll (Lenis), view transitions, and scroll-reveal animations (GSAP) as scaffolding.
+- Smooth scroll (Lenis) and view transitions as scaffolding.
 
 ## Quickstart
 

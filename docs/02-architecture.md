@@ -67,8 +67,8 @@ Several sections rendering the same singleton in one build share a single query.
 ## Rendering & motion
 
 - Static output: every page is prerendered. Only `src/pages/api/contact.ts` is dynamic (`export const prerender = false`).
-- `Layout.astro` boots Lenis, GSAP `ScrollTrigger`, and Astro view transitions; it tears them down on `astro:before-swap` to avoid leaks across navigations.
-- Section animations are colocated in each component's `<script>` and re-init on `astro:page-load`.
+- `Layout.astro` boots Lenis and Astro view transitions; it tears them down on `astro:before-swap` to avoid leaks across navigations.
+- Section animations can be colocated in each component's `<script>` or CSS.
 
 ## SEO
 

@@ -67,27 +67,169 @@ const ogImageURL = ogImage ? new URL(ogImage, SITE) : null
     </main>
 
     <script>
-      import { initSmoothScroll } from '@/lib/smooth-scroll'
-      import { gsap } from 'gsap'
-      import { ScrollTrigger } from 'gsap/ScrollTrigger'
+      import { destroySmoothScroll, initSmoothScroll } from '@/lib/smooth-scroll'
 
-      function initLayoutAll() {
-        initSmoothScroll()
+      let isPopStateNavigation = false
+      let pendingScrollReset = false
+      let isPointerNavigation = false
+
+      const HEADER_OFFSET = 100
+
+      document.addEventListener(
+        'pointerdown',
+        (e) => {
+          const target = e.target
+          isPointerNavigation = target instanceof Element && !!target.closest('a[href]')
+        },
+        { capture: true }
+      )
+
+      document.addEventListener(
+        'keydown',
+        () => {
+          isPointerNavigation = false
+        },
+        { capture: true }
+      )
+
+      function scrollToHashOrTop() {
+        const hash = window.location.hash
+        if (hash) {
+          const el = document.getElementById(decodeURIComponent(hash.slice(1)))
+          if (el) {
+            const y = el.getBoundingClientRect().top + window.scrollY - HEADER_OFFSET
+            window.scrollTo(0, y)
+            if (window.appLenis) window.appLenis.scrollTo(y, { immediate: true, force: true })
+            return
+          }
+        }
+        window.scrollTo(0, 0)
+        document.documentElement.scrollTop = 0
+        document.body.scrollTop = 0
+        if (window.appLenis) window.appLenis.scrollTo(0, { immediate: true, force: true })
       }
 
-      initLayoutAll()
-      document.addEventListener('astro:page-load', initLayoutAll)
+      function restoreSavedScroll() {
+        const saved = (history.state as { scrollY?: number } | null)?.scrollY
+        const y = typeof saved === 'number' ? saved : window.scrollY
+        const apply = () => {
+          window.scrollTo(0, y)
+          if (window.appLenis) window.appLenis.scrollTo(y, { immediate: true, force: true })
+        }
+        apply()
+        requestAnimationFrame(() => {
+          if (Math.abs(window.scrollY - y) > 1) apply()
+        })
+      }
+
+      function initLayout() {
+        initSmoothScroll()
+        if (pendingScrollReset) {
+          pendingScrollReset = false
+          scrollToHashOrTop()
+        } else {
+          restoreSavedScroll()
+        }
+      }
+
+      initLayout()
+      document.addEventListener('astro:page-load', () => initLayout())
+
+      document.addEventListener('astro:before-preparation', (e) => {
+        const ev = e as Event & {
+          navigationType?: 'push' | 'replace' | 'traverse'
+          direction?: 'forward' | 'back'
+        }
+        if (
+          ev.navigationType === 'traverse' ||
+          ev.direction === 'back' ||
+          ev.direction === 'forward'
+        ) {
+          isPopStateNavigation = true
+        } else {
+          isPopStateNavigation = false
+        }
+      })
+
+      document.addEventListener(
+        'click',
+        (e) => {
+          const target = e.target
+          if (target instanceof HTMLElement) {
+            const anchor = target.closest('a')
+            if (!anchor) return
+            const href = anchor.getAttribute('href')
+            if (!href) return
+
+            try {
+              const destUrl = new URL(href, window.location.href)
+              const normalize = (p: string) => p.replace(/\/$/, '') || '/'
+
+              if (
+                destUrl.origin === window.location.origin &&
+                normalize(destUrl.pathname) === normalize(window.location.pathname) &&
+                destUrl.search === window.location.search
+              ) {
+                e.preventDefault()
+                e.stopPropagation()
+                if (destUrl.hash) {
+                  const id = decodeURIComponent(destUrl.hash.slice(1))
+                  const el = document.getElementById(id)
+                  if (el) {
+                    const headerOffset = 100
+                    const y = el.getBoundingClientRect().top + window.scrollY - headerOffset
+                    if (window.appLenis) {
+                      window.appLenis.scrollTo(y)
+                    } else {
+                      window.scrollTo({ top: y, behavior: 'smooth' })
+                    }
+                    history.replaceState(null, '', destUrl.hash)
+                  }
+                } else {
+                  if (window.appLenis) {
+                    window.appLenis.scrollTo(0)
+                  } else {
+                    window.scrollTo({ top: 0, behavior: 'smooth' })
+                  }
+                }
+              }
+            } catch (err) {}
+          }
+        },
+        { capture: true }
+      )
+
+      function blurPersistedLink() {
+        if (!isPointerNavigation) return
+        const active = document.activeElement
+        if (
+          active instanceof HTMLElement &&
+          active.matches('a[href]') &&
+          active.closest('[data-astro-transition-persist]')
+        ) {
+          active.blur()
+        }
+      }
 
       document.addEventListener('astro:before-swap', () => {
-        ScrollTrigger.killAll()
-        if (window.appLenis) {
-          window.appLenis.destroy()
-          window.appLenis = undefined
+        destroySmoothScroll()
+        blurPersistedLink()
+        if (!isPopStateNavigation) {
+          window.scrollTo(0, 0)
+          document.documentElement.scrollTop = 0
+          document.body.scrollTop = 0
         }
-        if (window.lenisTicker) {
-          gsap.ticker.remove(window.lenisTicker)
-          window.lenisTicker = undefined
+        document.dispatchEvent(new CustomEvent('app:navigate'))
+      })
+
+      document.addEventListener('astro:after-swap', () => {
+        if (!isPopStateNavigation) {
+          window.scrollTo(0, 0)
+          document.documentElement.scrollTop = 0
+          document.body.scrollTop = 0
+          pendingScrollReset = true
         }
+        isPopStateNavigation = false
       })
     </script>
   </body>

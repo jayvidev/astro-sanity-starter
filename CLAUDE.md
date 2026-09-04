@@ -4,7 +4,7 @@ Conventions for AI coding agents working on this project.
 
 ## Stack & invariants
 
-- **Astro 6**, static output (`output: 'static'`), Vercel adapter. TypeScript strict. Tailwind v4 via `@tailwindcss/vite` (no `tailwind.config` — utilities live in `src/globals.css`).
+- **Astro 7**, static output (`output: 'static'`), Vercel adapter. TypeScript strict. Tailwind v4 via `@tailwindcss/vite` (no `tailwind.config` — utilities live in `src/globals.css`).
 - **pnpm only.** The Studio is a **separate workspace** in `/studio` with its own `package.json` + lockfile. Install/run it independently (`pnpm --dir studio …`). Don't hoist Studio deps into the root.
 - Path alias: `@/*` → `src/*` (set in both `tsconfig.json` and `astro.config.mjs`).
 

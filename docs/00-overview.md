@@ -1,6 +1,6 @@
 # 00 — Overview
 
-A starter template for a statically-built marketing site (Astro 6) whose content lives entirely in a Sanity Studio. Two halves:
+A starter template for a statically-built marketing site (Astro 7) whose content lives entirely in a Sanity Studio. Two halves:
 
 - **Frontend** (repo root) — Astro pages compiled to static HTML, deployed to Vercel. Fetches all content from Sanity at build time.
 - **Studio** (`/studio`) — the Sanity editing app. Its own pnpm workspace, deployed separately to `*.sanity.studio`.
